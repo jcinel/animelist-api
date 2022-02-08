@@ -1,4 +1,4 @@
-package com.crud.animelist;
+package com.api.animelist;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

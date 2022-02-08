@@ -1,4 +1,4 @@
-package com.crud.animelist;
+package com.api.animelist;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
