@@ -2,7 +2,7 @@ package com.api.animelist.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.ArrayList;
 
 @Entity
 @Table(name="Usuarios")
@@ -20,6 +20,8 @@ public class UserModel implements Serializable {
     private String email;
     @Column(nullable = false, length = 64)
     private String senha;
+    @OneToMany(mappedBy = "usuario")
+    private ArrayList<ListaAnimesModel> listaAnimes;
 
     public int getId() {
         return id;
