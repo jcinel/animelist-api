@@ -3,7 +3,6 @@ package com.api.animelist.models;
 import javax.persistence.*;
 import java.io.Serializable;
 
-
 @Entity
 @Table(name="ListaAnimes")
 public class ListaAnimesModel implements Serializable {
@@ -24,4 +23,43 @@ public class ListaAnimesModel implements Serializable {
     @JoinColumn(name = "ID_Usuario")
     private UserModel usuario;
 
+    public ListaAnimesKey getId() {
+        return id;
+    }
+
+    public void setId(ListaAnimesKey id) {
+        this.id = id;
+    }
+
+    public float getNota() {
+        return nota;
+    }
+
+    public void setNota(float nota) {
+        this.nota = nota;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public AnimeModel getAnime() {
+        return anime;
+    }
+
+    public void setAnime(AnimeModel anime) {
+        this.anime = anime;
+    }
+
+    public UserModel getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UserModel usuario) {
+        this.usuario = usuario;
+    }
 }

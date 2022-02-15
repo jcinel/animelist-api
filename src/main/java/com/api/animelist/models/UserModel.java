@@ -3,6 +3,7 @@ package com.api.animelist.models;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="Usuarios")
@@ -21,7 +22,9 @@ public class UserModel implements Serializable {
     @Column(nullable = false, length = 64)
     private String senha;
     @OneToMany(mappedBy = "usuario")
-    private ArrayList<ListaAnimesModel> listaAnimes;
+    private List<ListaAnimesModel> listaAnimes;
+    @OneToMany(mappedBy = "usuario")
+    private List<ListaMangasModel> listaMangas;
 
     public int getId() {
         return id;

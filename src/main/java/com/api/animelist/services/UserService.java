@@ -5,6 +5,7 @@ import com.api.animelist.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -17,5 +18,14 @@ public class UserService {
     @Transactional
     public UserModel save(UserModel userModel) {
         return userRepository.save(userModel);
+    }
+
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public List<UserModel> findAll() {
+        return userRepository.findAll();
     }
 }

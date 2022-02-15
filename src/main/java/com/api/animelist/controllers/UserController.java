@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3000)
@@ -24,8 +24,17 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto){
+        if (userService.existsByEmail(userDto.getEmail())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Este e-mail está indisponível");
+        }
+
         var userModel = new UserModel();
         BeanUtils.copyProperties(userDto, userModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userModel));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserModel>> getAllUsers(){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 }
