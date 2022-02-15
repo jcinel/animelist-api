@@ -48,15 +48,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userModelOptional.get());
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Object> updateUser(@PathVariable(value = "id") int id, @RequestBody @Valid UserDto userDto){
-//        Optional<UserModel> userModelOptional = userService.findById(id);
-//        if (!userModelOptional.isPresent()){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
-//        }
-//        var userModel = new UserModel();
-//        return ResponseEntity.status(HttpStatus.OK).body(userService.save(userModel));
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateUser(@PathVariable(value = "id") int id, @RequestBody @Valid UserDto userDto){
+        Optional<UserModel> userModelOptional = userService.findById(id);
+        if (!userModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+        }
+        var userModel = userModelOptional.get();
+        userModel.setNome(userDto.getNome());
+        userModel.setDataNasc(userDto.getDataNasc());
+        userModel.setEmail(userDto.getEmail());
+        userModel.setSenha(userDto.getSenha());
+        return ResponseEntity.status(HttpStatus.OK).body(userService.save(userModel));
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") int id){
