@@ -53,4 +53,14 @@ public class AnimeController {
         animeModel.setAutor(animeDto.getAutor());
         return ResponseEntity.status(HttpStatus.OK).body(animeService.save(animeModel));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteAnime(@PathVariable(value = "id") int id){
+        Optional<AnimeModel> animeModelOptional = animeService.findById((id));
+        if (!animeModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anime não encontrado");
+        }
+        animeService.delete(animeModelOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Anime deletado com sucesso");
+    }
 }

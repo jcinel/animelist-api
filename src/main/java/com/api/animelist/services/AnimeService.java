@@ -25,4 +25,7 @@ public class AnimeService {
     public Optional<AnimeModel> findById(int id) {
         return animeRepository.findById(id);
     }
+
+    @Transactional
+    public void delete(AnimeModel animeModel) { animeRepository.delete(animeModel); }
 }
