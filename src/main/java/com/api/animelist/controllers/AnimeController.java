@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.GeneratedValue;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3000)
@@ -24,5 +26,10 @@ public class AnimeController {
         var animeModel = new AnimeModel();
         BeanUtils.copyProperties(animeDto, animeModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(animeService.save(animeModel));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AnimeModel>> getAllAnimes() {
+        return ResponseEntity.status(HttpStatus.OK).body(animeService.findAll());
     }
 }
