@@ -2,7 +2,6 @@ package com.api.animelist.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
