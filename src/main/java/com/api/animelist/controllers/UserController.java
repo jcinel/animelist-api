@@ -1,7 +1,15 @@
 package com.api.animelist.controllers;
 
+import com.api.animelist.dto.AnimeDto;
+import com.api.animelist.dto.ListaAnimesRequestDto;
+import com.api.animelist.dto.ListaAnimesResponseDto;
 import com.api.animelist.dto.UserDto;
+import com.api.animelist.models.AnimeModel;
+import com.api.animelist.models.ListaAnimesKey;
+import com.api.animelist.models.ListaAnimesModel;
 import com.api.animelist.models.UserModel;
+import com.api.animelist.services.AnimeService;
+import com.api.animelist.services.ListaAnimesService;
 import com.api.animelist.services.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -19,8 +27,14 @@ public class UserController {
 
     final UserService userService;
 
-    public UserController(UserService userService) {
+    final AnimeService animeService;
+
+    final ListaAnimesService listaAnimesService;
+
+    public UserController(UserService userService, AnimeService animeService, ListaAnimesService listaAnimesService) {
         this.userService = userService;
+        this.animeService = animeService;
+        this.listaAnimesService = listaAnimesService;
     }
 
     @PostMapping
@@ -70,5 +84,27 @@ public class UserController {
         }
         userService.delete(userModelOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Usuário deletado com sucesso");
+    }
+
+    @PostMapping("/{id}/animes")
+    public ResponseEntity<Object> createListaAnimes
+            (@PathVariable(value = "id") int id, @RequestBody @Valid ListaAnimesRequestDto requestDto){
+        Optional<UserModel> userModelOptional = userService.findById(id);
+        if (!userModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+        }
+        Optional<AnimeModel> animeModelOptional = animeService.findById(requestDto.getAnimeId());
+        if (!animeModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anime não encontrado");
+        }
+        ListaAnimesModel listaAnimesModel = new ListaAnimesModel(requestDto.getUserId(), requestDto.getAnimeId());
+
+        listaAnimesModel.setNota(requestDto.getNota());
+        listaAnimesModel.setStatus(requestDto.getStatus());
+        listaAnimesModel.setAnimeModel(animeModelOptional.get());
+        listaAnimesModel.setUserModel(userModelOptional.get());
+        listaAnimesService.save(listaAnimesModel);
+        var responseDto = ListaAnimesResponseDto.build(listaAnimesModel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 }

@@ -1,7 +1,10 @@
 package com.api.animelist.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name="Animes")
@@ -11,10 +14,16 @@ public class AnimeModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     @Column(nullable = false, length = 50)
     private String nome;
+
     @Column(nullable = false, length = 50)
     private String autor;
+
+    @OneToMany(mappedBy = "animeModel")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<ListaAnimesModel> listaAnimes;
 
     public int getId() {
         return id;
@@ -34,6 +43,14 @@ public class AnimeModel implements Serializable {
 
     public String getAutor() {
         return autor;
+    }
+
+    public List<ListaAnimesModel> getListaAnimes() {
+        return listaAnimes;
+    }
+
+    public void setListaAnimes(List<ListaAnimesModel> listaAnimes) {
+        this.listaAnimes = listaAnimes;
     }
 
     public void setAutor(String autor) {

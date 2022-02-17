@@ -1,27 +1,42 @@
 package com.api.animelist.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="ListaAnimes")
+@Table(name="lista_animes")
 public class ListaAnimesModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private ListaAnimesKey id;
+    public ListaAnimesKey id;
     @Column
     private float nota;
     @Column(nullable = false, length = 50)
     private String status;
+
     @ManyToOne
     @MapsId("IdAnime")
-    @JoinColumn(name = "ID_Anime")
-    private AnimeModel anime;
+    @JoinColumn(name = "id_anime")
+    private AnimeModel animeModel;
+
     @ManyToOne
     @MapsId("IdUsuario")
-    @JoinColumn(name = "ID_Usuario")
-    private UserModel usuario;
+    @JoinColumn(name = "id_usuario")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private UserModel userModel;
+
+    public ListaAnimesModel(){
+    }
+
+    public ListaAnimesModel(int userId, int animeId){
+        ListaAnimesKey id = new ListaAnimesKey();
+        id.setIdAnime(animeId);
+        id.setIdUsuario(userId);
+        this.id = id;
+    }
 
     public ListaAnimesKey getId() {
         return id;
@@ -47,19 +62,19 @@ public class ListaAnimesModel implements Serializable {
         this.status = status;
     }
 
-    public AnimeModel getAnime() {
-        return anime;
+    public AnimeModel getAnimeModel() {
+        return animeModel;
     }
 
-    public void setAnime(AnimeModel anime) {
-        this.anime = anime;
+    public void setAnimeModel(AnimeModel animeModel) {
+        this.animeModel = animeModel;
     }
 
-    public UserModel getUsuario() {
-        return usuario;
+    public UserModel getUserModel() {
+        return userModel;
     }
 
-    public void setUsuario(UserModel usuario) {
-        this.usuario = usuario;
+    public void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
     }
 }

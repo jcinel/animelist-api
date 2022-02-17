@@ -1,6 +1,9 @@
 package com.api.animelist.dto;
 
+import com.api.animelist.models.ListaAnimesModel;
+
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 public class UserDto {
 
@@ -12,6 +15,7 @@ public class UserDto {
     private String email;
     @NotBlank
     private String senha;
+    private List<ListaAnimesModel> listaAnimes;
 
     public String getNome() {
         return nome;
@@ -43,5 +47,13 @@ public class UserDto {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public List<ListaAnimesModel> getListaAnimes() {
+        return listaAnimes;
+    }
+
+    public void setListaAnimes(List<ListaAnimesModel> listaAnimes) {
+        this.listaAnimes = listaAnimes;
     }
 }

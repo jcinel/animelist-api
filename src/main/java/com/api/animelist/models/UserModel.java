@@ -1,8 +1,10 @@
 package com.api.animelist.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="Usuarios")
@@ -19,11 +21,11 @@ public class UserModel implements Serializable {
     @Column(nullable = false, unique = true, length = 255)
     private String email;
     @Column(nullable = false, length = 64)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
-    @OneToMany(mappedBy = "usuario")
-    private List<ListaAnimesModel> listaAnimes;
-    @OneToMany(mappedBy = "usuario")
-    private List<ListaMangasModel> listaMangas;
+    @OneToMany(mappedBy = "userModel")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Set<ListaAnimesModel> listaAnimes;
 
     public int getId() {
         return id;
@@ -63,5 +65,13 @@ public class UserModel implements Serializable {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Set<ListaAnimesModel> getListaAnimes() {
+        return listaAnimes;
+    }
+
+    public void setListaAnimes(Set<ListaAnimesModel> listaAnimes) {
+        this.listaAnimes = listaAnimes;
     }
 }

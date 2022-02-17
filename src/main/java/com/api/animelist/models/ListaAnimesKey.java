@@ -8,9 +8,9 @@ import java.util.Objects;
 @Embeddable
 public class ListaAnimesKey implements Serializable {
 
-    @Column(name = "ID_Anime")
+    @Column(name = "id_anime")
     private int IdAnime;
-    @Column(name = "ID_Usuario")
+    @Column(name = "id_usuario")
     private int IdUsuario;
 
     public int getIdAnime() {
