@@ -134,4 +134,27 @@ public class UserController {
         var responseDto = ListaAnimesResponseDto.build(listaAnimesModel);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
+
+    @DeleteMapping("/{id}/animes/{idanime}")
+    public ResponseEntity<Object> deleteListaAnimes
+            (@PathVariable(value = "id") int id,
+             @PathVariable(value = "idanime") int idAnime) {
+        Optional<UserModel> userModelOptional = userService.findById(id);
+        if (!userModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+        }
+        Optional<AnimeModel> animeModelOptional = animeService.findById(idAnime);
+        if (!animeModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anime não encontrado");
+        }
+        ListaAnimesKey listaAnimesKey = new ListaAnimesKey(id, idAnime);
+        Optional<ListaAnimesModel> listaAnimesModelOptional = listaAnimesService.findById(listaAnimesKey);
+        if (!listaAnimesModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anime não encontrado na lista");
+        }
+
+        var listaAnimesModel = listaAnimesModelOptional.get();
+        listaAnimesService.delete(listaAnimesModel);
+        return ResponseEntity.status(HttpStatus.OK).body("Anime deletado da lista com sucesso");
+    }
 }
