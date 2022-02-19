@@ -108,6 +108,16 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
+    @GetMapping("/{id}/animes")
+    public ResponseEntity<Object> getListaAnimes(@PathVariable(value = "id") int id) {
+        Optional<UserModel> userModelOptional = userService.findById(id);
+        if (!userModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+        }
+        List<ListaAnimesModel> listaAnimes = listaAnimesService.findAllByUser(id);
+        return ResponseEntity.status(HttpStatus.OK).body(listaAnimes);
+    }
+
     @PutMapping("/{id}/animes/{idanime}")
     public ResponseEntity<Object> updateListaAnimes
             (@PathVariable(value = "id") int id,

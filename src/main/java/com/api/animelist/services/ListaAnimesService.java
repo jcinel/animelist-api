@@ -6,6 +6,7 @@ import com.api.animelist.repositories.ListaAnimesRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,9 @@ public class ListaAnimesService {
     public ListaAnimesService(ListaAnimesRepository listaAnimesRepository) { this.listaAnimesRepository = listaAnimesRepository; }
 
     @Transactional
-    public Object save(ListaAnimesModel listaAnimesModel) { return listaAnimesRepository.save(listaAnimesModel); }
+    public void save(ListaAnimesModel listaAnimesModel) {
+        listaAnimesRepository.save(listaAnimesModel);
+    }
 
     public List<ListaAnimesModel> findAll() {
         return listaAnimesRepository.findAll();
@@ -25,6 +28,17 @@ public class ListaAnimesService {
 
     public Optional<ListaAnimesModel> findById(ListaAnimesKey id) {
         return listaAnimesRepository.findById(id);
+    }
+
+    public List<ListaAnimesModel> findAllByUser(int id) {
+        var listaAnimesAll = listaAnimesRepository.findAll();
+        List<ListaAnimesModel> listaAnimesUser = new ArrayList<>();
+        for (ListaAnimesModel model : listaAnimesAll) {
+            if (model.getId().getIdUsuario() == id) {
+                listaAnimesUser.add(model);
+            }
+        }
+        return listaAnimesUser;
     }
 
     @Transactional
