@@ -38,8 +38,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto){
-        if (userService.existsByEmail(userDto.getEmail())){
+    public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto) {
+        if (userService.existsByEmail(userDto.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Este e-mail está indisponível");
         }
 
@@ -49,12 +49,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserModel>> getAllUsers(){
+    public ResponseEntity<List<UserModel>> getAllUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getOneUser(@PathVariable(value = "id") int id){
+    public ResponseEntity<Object> getOneUser(@PathVariable(value = "id") int id) {
         Optional<UserModel> userModelOptional = userService.findById(id);
         if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
@@ -63,9 +63,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateUser(@PathVariable(value = "id") int id, @RequestBody @Valid UserDto userDto){
+    public ResponseEntity<Object> updateUser(@PathVariable(value = "id") int id, @RequestBody @Valid UserDto userDto) {
         Optional<UserModel> userModelOptional = userService.findById(id);
-        if (!userModelOptional.isPresent()){
+        if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
         }
         var userModel = userModelOptional.get();
@@ -77,7 +77,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") int id){
+    public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") int id) {
         Optional<UserModel> userModelOptional = userService.findById(id);
         if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
@@ -88,7 +88,7 @@ public class UserController {
 
     @PostMapping("/{id}/animes")
     public ResponseEntity<Object> createListaAnimes
-            (@PathVariable(value = "id") int id, @RequestBody @Valid ListaAnimesRequestDto requestDto){
+            (@PathVariable(value = "id") int id, @RequestBody @Valid ListaAnimesRequestDto requestDto) {
         Optional<UserModel> userModelOptional = userService.findById(id);
         if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
@@ -106,5 +106,32 @@ public class UserController {
         listaAnimesService.save(listaAnimesModel);
         var responseDto = ListaAnimesResponseDto.build(listaAnimesModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    @PutMapping("/{id}/animes/{idanime}")
+    public ResponseEntity<Object> updateListaAnimes
+            (@PathVariable(value = "id") int id,
+             @PathVariable(value = "idanime") int idAnime,
+             @RequestBody @Valid ListaAnimesRequestDto requestDto) {
+        Optional<UserModel> userModelOptional = userService.findById(id);
+        if (!userModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+        }
+        Optional<AnimeModel> animeModelOptional = animeService.findById(requestDto.getAnimeId());
+        if (!animeModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anime não encontrado");
+        }
+        ListaAnimesKey listaAnimesKey = new ListaAnimesKey(id, idAnime);
+        Optional<ListaAnimesModel> listaAnimesModelOptional = listaAnimesService.findById(listaAnimesKey);
+        if (!listaAnimesModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anime não encontrado na lista");
+        }
+
+        var listaAnimesModel = listaAnimesModelOptional.get();
+        listaAnimesModel.setNota(requestDto.getNota());
+        listaAnimesModel.setStatus(requestDto.getStatus());
+        listaAnimesService.save(listaAnimesModel);
+        var responseDto = ListaAnimesResponseDto.build(listaAnimesModel);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }
