@@ -1,6 +1,5 @@
 package com.api.animelist.controllers;
 
-import com.api.animelist.dto.AnimeDto;
 import com.api.animelist.dto.ListaAnimesRequestDto;
 import com.api.animelist.dto.ListaAnimesResponseDto;
 import com.api.animelist.dto.UserDto;
@@ -12,11 +11,14 @@ import com.api.animelist.services.AnimeService;
 import com.api.animelist.services.ListaAnimesService;
 import com.api.animelist.services.UserService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,8 +51,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserModel>> getAllUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
+    public ResponseEntity<Page<UserModel>> getAllUsers(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(pageable));
     }
 
     @GetMapping("/{id}")
@@ -115,7 +117,12 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
         }
         List<ListaAnimesModel> listaAnimes = listaAnimesService.findAllByUser(id);
-        return ResponseEntity.status(HttpStatus.OK).body(listaAnimes);
+        List<ListaAnimesResponseDto> animesUsuario = new ArrayList<>();
+        for (var model : listaAnimes) {
+            var responseDto = ListaAnimesResponseDto.build(model);
+            animesUsuario.add(responseDto);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(animesUsuario);
     }
 
     @PutMapping("/{id}/animes/{idanime}")

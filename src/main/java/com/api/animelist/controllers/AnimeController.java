@@ -4,12 +4,13 @@ import com.api.animelist.dto.AnimeDto;
 import com.api.animelist.models.AnimeModel;
 import com.api.animelist.services.AnimeService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -29,8 +30,8 @@ public class AnimeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AnimeModel>> getAllAnimes() {
-        return ResponseEntity.status(HttpStatus.OK).body(animeService.findAll());
+    public ResponseEntity<Page<AnimeModel>> getAllAnimes(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(animeService.findAll(pageable));
     }
 
     @GetMapping("/{id}")

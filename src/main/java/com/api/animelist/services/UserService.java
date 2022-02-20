@@ -2,10 +2,11 @@ package com.api.animelist.services;
 
 import com.api.animelist.models.UserModel;
 import com.api.animelist.repositories.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,8 +27,8 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public List<UserModel> findAll() {
-        return userRepository.findAll();
+    public Page<UserModel> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     public Optional<UserModel> findById(int id) {
