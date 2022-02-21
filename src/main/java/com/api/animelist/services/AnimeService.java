@@ -16,6 +16,10 @@ public class AnimeService {
 
     public AnimeService(AnimeRepository animeRepository) { this.animeRepository = animeRepository; }
 
+    public boolean findByNome(String nome) {
+        return animeRepository.findByNome(nome);
+    }
+
     @Transactional
     public Object save(AnimeModel animeModel) { return animeRepository.save(animeModel); }
 
