@@ -67,6 +67,27 @@ public class AnimeControllerTest {
     }
 
     @Test
+    public void updateOneAnimeTest(){
+        animeController = new AnimeController(animeService);
+        AnimeModel animeModel = new AnimeModel();
+        animeModel.setNome("Demon Slayer");
+        animeModel.setAutor("Koyoharu");
+        AnimeDto animeDto = new AnimeDto();
+        animeDto.setNome("Kimetsu no Yaiba");
+        animeDto.setAutor("Koyoharu Gotoge");
+
+        when(animeService.findById(8)).thenReturn(Optional.of(animeModel));
+
+        ResponseEntity<Object> response = animeController.updateAnime(8, animeDto);
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        when(animeService.findById(2)).thenReturn(Optional.empty());
+
+        response = animeController.updateAnime(2, animeDto);
+        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
     public void deleteOneAnimeTest(){
         animeController = new AnimeController(animeService);
 
