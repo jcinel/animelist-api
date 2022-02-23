@@ -8,12 +8,19 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
@@ -49,6 +56,20 @@ public class AnimeControllerTest {
 
         response = animeController.saveAnime(animeDto);
         Assert.assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    }
+
+    @Test
+    public void getAllAnimes(){
+        animeController = new AnimeController(animeService);
+
+        var pageable = PageRequest.of(0, 20);
+        List<AnimeModel> animelist = Arrays.asList(new AnimeModel(), new AnimeModel());
+
+        var page = new PageImpl<AnimeModel>(animelist, pageable, animelist.size());
+        when(animeService.findAll(Mockito.any(PageRequest.class))).thenReturn(page);
+
+        ResponseEntity<Page<AnimeModel>> response = animeController.getAllAnimes(pageable);
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
