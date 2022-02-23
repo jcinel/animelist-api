@@ -24,7 +24,7 @@ public class AnimeController {
 
     @PostMapping
     public ResponseEntity<Object> saveAnime(@RequestBody @Valid AnimeDto animeDto){
-        boolean animeModelExists = animeService.findByNome(animeDto.getNome());
+        boolean animeModelExists = animeService.existsByNome(animeDto.getNome());
         if (animeModelExists){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Anime já existente");
         }

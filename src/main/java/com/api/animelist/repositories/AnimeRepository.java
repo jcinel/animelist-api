@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AnimeRepository extends JpaRepository<AnimeModel, Integer> {
-    boolean findByNome(String nome);
+    boolean existsByNome(String nome);
 }

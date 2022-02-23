@@ -16,8 +16,8 @@ public class AnimeService {
 
     public AnimeService(AnimeRepository animeRepository) { this.animeRepository = animeRepository; }
 
-    public boolean findByNome(String nome) {
-        return animeRepository.findByNome(nome);
+    public boolean existsByNome(String nome) {
+        return animeRepository.existsByNome(nome);
     }
 
     @Transactional

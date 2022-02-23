@@ -37,7 +37,7 @@ public class AnimeControllerTest {
         animeDto.setNome("Naruto");
         animeDto.setAutor("Kishimoto");
 
-        when(animeService.findByNome("Naruto")).thenReturn(true);
+        when(animeService.existsByNome("Naruto")).thenReturn(true);
 
         ResponseEntity<Object> response = animeController.saveAnime(animeDto);
         Assert.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
