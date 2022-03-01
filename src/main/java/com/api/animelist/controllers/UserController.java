@@ -33,14 +33,17 @@ public class UserController {
 
     final ListaAnimesService listaAnimesService;
 
+    // Construtor
     public UserController(UserService userService, AnimeService animeService, ListaAnimesService listaAnimesService) {
         this.userService = userService;
         this.animeService = animeService;
         this.listaAnimesService = listaAnimesService;
     }
 
+    // Método responsável por inserir um usuário no sistema
     @PostMapping
     public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto) {
+        // Caso o e-mail já esteja sendo utilizado retorna um conflito
         if (userService.existsByEmail(userDto.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Este e-mail está indisponível");
         }
@@ -50,11 +53,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userModel));
     }
 
+    // Método responsável por listar todos os usuários do sistema
     @GetMapping
     public ResponseEntity<Page<UserModel>> getAllUsers(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(pageable));
     }
 
+    // Método responsável por exibir um usuário de acordo com o id passado
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOneUser(@PathVariable(value = "id") int id) {
         Optional<UserModel> userModelOptional = userService.findById(id);
@@ -64,6 +69,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userModelOptional.get());
     }
 
+    // Método responsável por atualizar um ou mais campos de um usuário
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateUser(@PathVariable(value = "id") int id, @RequestBody @Valid UserDto userDto) {
         Optional<UserModel> userModelOptional = userService.findById(id);
@@ -78,6 +84,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.save(userModel));
     }
 
+    // Método responsável por deletar um usuário do sistema
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") int id) {
         Optional<UserModel> userModelOptional = userService.findById(id);
@@ -88,18 +95,28 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("Usuário deletado com sucesso");
     }
 
+    // Método responsável por inserir um novo anime na lista de animes do usuário
     @PostMapping("/{id}/animes")
     public ResponseEntity<Object> createListaAnimes
             (@PathVariable(value = "id") int id, @RequestBody @Valid ListaAnimesRequestDto requestDto) {
         Optional<UserModel> userModelOptional = userService.findById(id);
+        // Confere se o usuário existe
         if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
         }
+        // Confere se o anime existe
         Optional<AnimeModel> animeModelOptional = animeService.findById(requestDto.getAnimeId());
         if (!animeModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anime não encontrado");
         }
+
         ListaAnimesModel listaAnimesModel = new ListaAnimesModel(requestDto.getUserId(), requestDto.getAnimeId());
+
+        ListaAnimesKey listaAnimesKey = new ListaAnimesKey(id, requestDto.getAnimeId());
+        Optional<ListaAnimesModel> listaAnimesModelOptional = listaAnimesService.findById(listaAnimesKey);
+        if (listaAnimesModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Anime já existente na lista");
+        }
 
         listaAnimesModel.setNota(requestDto.getNota());
         listaAnimesModel.setStatus(requestDto.getStatus());
@@ -110,6 +127,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
+    // Método responsável por exibir a lista de animes do usuário
     @GetMapping("/{id}/animes")
     public ResponseEntity<Object> getListaAnimes(@PathVariable(value = "id") int id) {
         Optional<UserModel> userModelOptional = userService.findById(id);
@@ -125,6 +143,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(animesUsuario);
     }
 
+    // Método responsável por atualizar um anime na lista de animes do usuário
     @PutMapping("/{id}/animes/{idanime}")
     public ResponseEntity<Object> updateListaAnimes
             (@PathVariable(value = "id") int id,
@@ -152,6 +171,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
+    // Método responsável por deletar um anime da lista de animes do usuário
     @DeleteMapping("/{id}/animes/{idanime}")
     public ResponseEntity<Object> deleteListaAnimes
             (@PathVariable(value = "id") int id,

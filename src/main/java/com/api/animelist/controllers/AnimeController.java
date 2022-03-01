@@ -20,24 +20,31 @@ public class AnimeController {
 
     final AnimeService animeService;
 
+    // Construtor
     public AnimeController(AnimeService animeService) { this.animeService = animeService; }
 
+    // Método responsável por inserir um novo anime
     @PostMapping
     public ResponseEntity<Object> saveAnime(@RequestBody @Valid AnimeDto animeDto){
+        // Confere se esse anime já existe na lista
         boolean animeModelExists = animeService.existsByNome(animeDto.getNome());
+        // Caso o anime já exista há um conflito
         if (animeModelExists){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Anime já existente");
         }
+        // Caso contrário o anime é inserido normalmente
         var animeModel = new AnimeModel();
         BeanUtils.copyProperties(animeDto, animeModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(animeService.save(animeModel));
     }
 
+    // Método responsável por exibir todos o animes da lista
     @GetMapping
     public ResponseEntity<Page<AnimeModel>> getAllAnimes(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(animeService.findAll(pageable));
     }
 
+    // Método responsável por exibir um único anime de acordo com o id que foi passado
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOneAnime(@PathVariable(value = "id") int id){
         Optional<AnimeModel> animeModelOptional = animeService.findById(id);
@@ -47,6 +54,7 @@ public class AnimeController {
         return ResponseEntity.status(HttpStatus.OK).body(animeModelOptional.get());
     }
 
+    // Método responsável por atualizar um ou mais campos de um anime
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateAnime(@PathVariable(value = "id") int id, @RequestBody @Valid AnimeDto animeDto){
         Optional<AnimeModel> animeModelOptional = animeService.findById(id);
@@ -59,6 +67,7 @@ public class AnimeController {
         return ResponseEntity.status(HttpStatus.OK).body(animeService.save(animeModel));
     }
 
+    // Método responsável por deletar um anime da lista
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAnime(@PathVariable(value = "id") int id){
         Optional<AnimeModel> animeModelOptional = animeService.findById((id));

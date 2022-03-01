@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +27,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
+// Testes na classe AnimeController
 public class AnimeControllerTest {
 
     @Mock
@@ -35,6 +35,7 @@ public class AnimeControllerTest {
 
     private AnimeController animeController;
 
+    // Inserindo um novo anime
     @Test
     public void postOneAnimeTest(){
         animeController = new AnimeController(animeService);
@@ -58,6 +59,7 @@ public class AnimeControllerTest {
         Assert.assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
+    // Retorna todos os animes da lista geral
     @Test
     public void getAllAnimes(){
         animeController = new AnimeController(animeService);
@@ -72,6 +74,7 @@ public class AnimeControllerTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
+    // Retorna um anime específico de acordo com o id que foi passado
     @Test
     public void getOneAnimeTest(){
         animeController = new AnimeController(animeService);
@@ -87,6 +90,7 @@ public class AnimeControllerTest {
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
+    // Atualiza um ou mais campos em um anime específico
     @Test
     public void updateOneAnimeTest(){
         animeController = new AnimeController(animeService);
@@ -108,6 +112,7 @@ public class AnimeControllerTest {
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
+    // Deleta um anime específico
     @Test
     public void deleteOneAnimeTest(){
         animeController = new AnimeController(animeService);
