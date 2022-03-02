@@ -3,7 +3,6 @@ package com.api.animelist.models;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 @Embeddable
