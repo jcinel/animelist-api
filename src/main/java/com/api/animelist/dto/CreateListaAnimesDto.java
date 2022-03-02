@@ -1,27 +1,16 @@
 package com.api.animelist.dto;
 
-import com.api.animelist.models.ListaAnimesModel;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class ListaAnimesRequestDto {
+public class CreateListaAnimesDto {
 
-    @NotNull
-    private int userId;
     @NotNull
     private int animeId;
     private float nota;
     @NotBlank
     private String status;
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     public int getAnimeId() {
         return animeId;

@@ -1,7 +1,8 @@
 package com.api.animelist.controllers;
 
-import com.api.animelist.dto.ListaAnimesRequestDto;
+import com.api.animelist.dto.CreateListaAnimesDto;
 import com.api.animelist.dto.ListaAnimesResponseDto;
+import com.api.animelist.dto.UpdateListaAnimesDto;
 import com.api.animelist.dto.UserDto;
 import com.api.animelist.models.AnimeModel;
 import com.api.animelist.models.ListaAnimesKey;
@@ -98,7 +99,7 @@ public class UserController {
     // Método responsável por inserir um novo anime na lista de animes do usuário
     @PostMapping("/{id}/animes")
     public ResponseEntity<Object> createListaAnimes
-            (@PathVariable(value = "id") int id, @RequestBody @Valid ListaAnimesRequestDto requestDto) {
+            (@PathVariable(value = "id") int id, @RequestBody @Valid CreateListaAnimesDto requestDto) {
         Optional<UserModel> userModelOptional = userService.findById(id);
         // Confere se o usuário existe
         if (!userModelOptional.isPresent()) {
@@ -110,7 +111,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anime não encontrado");
         }
 
-        ListaAnimesModel listaAnimesModel = new ListaAnimesModel(requestDto.getUserId(), requestDto.getAnimeId());
+        ListaAnimesModel listaAnimesModel = new ListaAnimesModel(id, requestDto.getAnimeId());
 
         ListaAnimesKey listaAnimesKey = new ListaAnimesKey(id, requestDto.getAnimeId());
         Optional<ListaAnimesModel> listaAnimesModelOptional = listaAnimesService.findById(listaAnimesKey);
@@ -148,12 +149,12 @@ public class UserController {
     public ResponseEntity<Object> updateListaAnimes
             (@PathVariable(value = "id") int id,
              @PathVariable(value = "idanime") int idAnime,
-             @RequestBody @Valid ListaAnimesRequestDto requestDto) {
+             @RequestBody @Valid UpdateListaAnimesDto requestDto) {
         Optional<UserModel> userModelOptional = userService.findById(id);
         if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
         }
-        Optional<AnimeModel> animeModelOptional = animeService.findById(requestDto.getAnimeId());
+        Optional<AnimeModel> animeModelOptional = animeService.findById(idAnime);
         if (!animeModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anime não encontrado");
         }
