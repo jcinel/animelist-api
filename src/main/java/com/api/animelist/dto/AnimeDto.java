@@ -9,6 +9,8 @@ public class AnimeDto {
     @NotBlank
     private String autor;
 
+    private String sinopse;
+
     public String getNome() {
         return nome;
     }
@@ -23,5 +25,13 @@ public class AnimeDto {
 
     public void setAutor(String autor) {
         this.autor = autor;
+    }
+
+    public String getSinopse() {
+        return sinopse;
+    }
+
+    public void setSinopse(String sinopse) {
+        this.sinopse = sinopse;
     }
 }

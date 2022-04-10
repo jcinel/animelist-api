@@ -21,6 +21,9 @@ public class AnimeModel implements Serializable {
     @Column(nullable = false, length = 50)
     private String autor;
 
+    @Column(length = 500)
+    private String sinopse;
+
     @OneToMany(mappedBy = "animeModel")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<ListaAnimesModel> listaAnimes;
@@ -55,5 +58,13 @@ public class AnimeModel implements Serializable {
 
     public void setAutor(String autor) {
         this.autor = autor;
+    }
+
+    public String getSinopse() {
+        return sinopse;
+    }
+
+    public void setSinopse(String sinopse) {
+        this.sinopse = sinopse;
     }
 }

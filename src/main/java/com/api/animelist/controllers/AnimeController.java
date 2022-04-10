@@ -64,6 +64,7 @@ public class AnimeController {
         var animeModel = animeModelOptional.get();
         animeModel.setNome(animeDto.getNome());
         animeModel.setAutor(animeDto.getAutor());
+        animeModel.setSinopse(animeDto.getSinopse());
         return ResponseEntity.status(HttpStatus.OK).body(animeService.save(animeModel));
     }
 

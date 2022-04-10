@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 
 public class ListaAnimesResponseDto {
 
+    private int id;
     private float nota;
     @NotBlank
     private String status;
@@ -13,6 +14,14 @@ public class ListaAnimesResponseDto {
     private String nome;
     @NotBlank
     private String autor;
+
+    private String sinopse;
+
+    public int getId() { return this.id; }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public float getNota() {
         return nota;
@@ -46,8 +55,17 @@ public class ListaAnimesResponseDto {
         this.autor = autor;
     }
 
+    public String getSinopse() {
+        return sinopse;
+    }
+
+    public void setSinopse(String sinopse) {
+        this.sinopse = sinopse;
+    }
+
     public static ListaAnimesResponseDto build(ListaAnimesModel model){
         ListaAnimesResponseDto responseDto = new ListaAnimesResponseDto();
+        responseDto.setId(model.getAnimeModel().getId());
         responseDto.setNome(model.getAnimeModel().getNome());
         responseDto.setAutor(model.getAnimeModel().getAutor());
         responseDto.setNota(model.getNota());
